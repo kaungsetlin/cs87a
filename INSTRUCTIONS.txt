@@ -3,16 +3,19 @@ INSTRUCTIONS:
 2. login with username: testuser@email.com, password: testpass123
 [alternatively, you could sign up with your email to recieve notifications]
 
-functions to try:
-1. checkout an item and pay with test credit card: 4242 4242 4242 4242
-2. full text search on navigation (e.g. retro, red)
-3. create account, reset password
-
-TO INSTALL ON LOCAL COMPUTER: 
+OR INSTALL ON LOCAL COMPUTER: 
 *some commands may need to be changed on Windows
+*environment variables not included for security reasons
 1. open terminal and cd into location of project: e.g. cd path/to/project
 2. activate virtual environment: python3 -m venv venv
 3. install requirements: pip install -r requirements.txt
 4. activate virtual environment: source venv/bin/activate
 5. run flask web application: flask run
 6. go to browser at: 127.0.0.1:5000 or localhost:5000
+
+
+FUNCTIONS TO TRY:
+1. checkout an item and pay with test credit card: 4242 4242 4242 4242
+2. full text search on navigation (e.g. retro, red)
+3. create account, reset password
+

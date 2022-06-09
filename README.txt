@@ -41,6 +41,9 @@ IV. Instructions on Accessing Project:
 	2. Login with username: testuser@email.com, password: testpass123
 	[Alternatively, you could sign up with your email to receive notifications]
 
+	Github:
+	1. https://github.com/kaungsetlin/sinphyudaw.git
+	
 	Functions to try:
 	1. Checkout an item and pay with test credit card on Stripe: 4242 4242 4242 4242
 	2. Full text search on navigation (e.g. retro, red)
