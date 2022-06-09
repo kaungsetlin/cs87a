@@ -13,11 +13,11 @@ def create_app(test_config = None):
     app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'apikey'
-    app.config['MAIL_PASSWORD'] = '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'
-    app.config['MAIL_DEFAULT_SENDER'] = 'admin@sinphyudaw.com'
-    app.config['ADMIN'] = 'kaungsetlin.ayeyarwady@gmail.com'
-    stripe.api_key = 'sk_test_51KqpUlFnRGi6mWyfF8iP4wBwYckVwcrdk7QuIeKcjmmF09IGP6KLKp2gKMUmgWCLTPhhlRMymxIbO4z6tW1JpWs600BZioHfFO'
+    app.config['MAIL_USERNAME'] = None
+    app.config['MAIL_PASSWORD'] = None
+    app.config['MAIL_DEFAULT_SENDER'] = None
+    app.config['ADMIN'] = None
+    stripe.api_key = None
 
     #initialize database
     from . import db
