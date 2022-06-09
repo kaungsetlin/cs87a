@@ -1,0 +1,65 @@
+{%extends 'base.html'%}
+{%block header%}
+<h1>{%block title%}Cart{%endblock%}</h1>{%endblock%}
+{%block content%}
+{%if total_price is none or total_price == 0%}
+<div class="h5 my-3">
+Your cart is empty...
+</div>
+<a class="btn btn-primary" href="{{url_for('store.store')}}">Back to store</a>
+{%else%}
+<div class="row">
+  <div class="col-lg-12 table-responsive">
+    <table class="table table-sm table-hover">
+      <thead>
+        <tr>
+          <th scope="col"> </th>
+          <th scope="col">Item</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for cart_item in cart_items%}
+        {%set outer_loop = loop%}
+        <tr>
+          {%for key,value in cart_item.items()%}
+          {%if key['img'] is not none%}
+          <th class="align-middle py-2"scope="row"><img width="80" src="{{url_for('static', filename=key['img'])}}" alt="{{key['alt_sku']}}"></th>
+          {%else%}
+          <th class="align-middle py-2"scope="row"><img width="80" src="https://picsum.photos/seed/{{outer_loop.index}}/200" alt=""></th>
+          {%endif%}
+          <td class="align-middle py-2">{{key['alt_sku']}}</td>
+          <td class="align-middle py-2">{{ "${:,.2f}".format(key['price']*value)}}</td>
+          <td class="align-middle py-2">
+            <div class="row">
+              <form class="col-lg-3 col-md-3 col-sm-1" action="{{url_for('store.cart')}}" style="display:inline;" method="post">
+                <input type="hidden" name="sku" value="{{key['alt_sku']}}" aria-label="quantity">
+                <input class="form-control" type="number" name="qty" min="1" value="{{value}}" onchange="this.form.submit()">
+              </form>
+            </div>
+          </td>
+          <td class="align-middle"><a href="{{url_for('store.cart_delete', sku = key['alt_sku'])}}">Remove</a></td>
+          {%endfor%}
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="h5 my-3">
+      Total: {{"${:,.2f}".format(total_price)}}
+    </div>
+    <form method="post">
+      <input type="hidden" name="checkout_items" value="{{cart_items}}">
+      <input type="submit" name="action" class="btn btn-success" value="Checkout">
+    </form>
+  </div>
+</div>
+{%endif%}
+
+{%endblock%}

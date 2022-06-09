@@ -1,0 +1,173 @@
+{%extends 'base.html'%}
+<h1>{%block title%}Home{%endblock%}</h1>
+
+{%block content%}
+<div class="row my-3">
+  <div class="col-12">
+    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active" style="width: 100%; height: 400px; overflow: hidden;">
+          <img src="{{url_for('static', filename='home/carousel_1.jpeg')}}" class="d-block img-fluid" alt="..." style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="carousel-item" style="width: 100%; height: 400px; overflow: hidden;">
+          <img src="{{url_for('static', filename='home/carousel_2.jpeg')}}" class="d-block img-fluid" alt="..." style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="carousel-item" style="width: 100%; height: 400px; overflow: hidden;">
+          <img src="{{url_for('static', filename='home/carousel_3.jpeg')}}" class="d-block img-fluid" alt="..." style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="row my-3 justify-content-between">
+  <div class="card col-lg-4 col-md-12 col-sm-12 my-3 bg-light h-100">
+    <div class="card-body">
+      <h5 class="card-title">Cart</h5>
+      {%if session.get('cart') is none or total_price == 0%}
+      <p class="card-text">Your cart is empty...</p>
+      {%endif%}
+    </div>
+    <ul class="list-group list-group-flush">
+      {%if cart_items is not none%}
+      {%for cart_item in cart_items%}
+      {%for key,value in cart_item.items() if loop.index <= 2%}
+      <li class="list-group-item bg-light text-end">{{key['alt_sku']}} qty x{{value}} {{ "${:,.2f}".format(key['price']*value)}}</li>
+      {%endfor%}
+      {%endfor%}
+      {%if cart_items|length > 2%}
+      <li class="list-group-item bg-light text-end">Go to cart for more. . .</li>
+      {%endif%}
+      {%endif%}
+    </ul>
+    {%if total_price is not none and total_price != 0%}
+    <div class="card-footer text-end">
+      Total: {{"${:,.2f}".format(total_price)}}
+    </div>
+    {%endif%}
+    <div class="card-footer bg-light d-flex justify-content-evenly gap-3">
+      {%if session.get('cart') is none or total_price == 0%}
+      <a class="btn btn-secondary  my-2" href="#">Help Me Choose</a>
+      <a class="btn btn-secondary my-2" href="{{url_for('store.store')}}">Go to Store</a>
+      {%else%}
+      <a class="btn btn-secondary my-2 position-relative" href="{{url_for('store.cart')}}">
+        Go to cart
+        {%if total_price > 0%}
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          {{cart_items|length}}
+          <span class="visually-hidden">items in cart</span>
+        </span>
+        {%endif%}
+      </a>
+      <a class="btn btn-success my-2" href="{{url_for('store.checkout')}}">Checkout</a>
+      {%endif%}
+    </div>
+
+  </div>
+
+  <div class="card col-lg-4 col-md-6 col-sm-12 my-3 bg-light h-100">
+    <div class="card-body">
+      <h5 class="card-title">Recent orders</h5>
+      {%if g.user is none%}
+      <p class="card-text">You need to be logged in to view orders...</p>
+      <div class="card-footer bg-light d-flex justify-content-evenly pb-0 pt-3">
+        <a class="btn btn-secondary" href="{{url_for('auth.login')}}">Login</a>
+      </div>
+    </div>
+  </div>
+  {%else%}
+</div>
+<ul class="list-group list-group-flush">
+  {%if orders is none%}
+  <li class="list-group-item bg-light">No orders found...</li>
+  {%endif%}
+  {%for order in orders%}
+  <li class="list-group-item bg-light">Order ID: {{order['cust_po']}} <small>Date: {{order['order_start']}}</small></li>
+  {%endfor%}
+</ul>
+<div class="card-body">
+  <a class="btn btn-secondary" href="{{url_for('store.orders')}}">Manage orders</a>
+</div>
+</div>
+{%endif%}
+
+<div class="card col-lg-3 col-md-5 col-sm-12 my-3 bg-light">
+  <div class="card-body">
+    <h5 class="card-title">Hot Keywords</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item bg-light">Full Face</li>
+    <li class="list-group-item bg-light">Half Face</li>
+    <li class="list-group-item bg-light">Gloves</li>
+  </ul>
+</div>
+</div>
+
+
+<div class="row mb-3 justify-content-around gy-5">
+  <div class="col-lg-12 col-md-12 col-sm-12 bg-light border">
+    <h1 class="row mt-2 justify-content-center">Top Sellers</h1>
+    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2 my-3">
+      {%for model in top_products%}
+      {%if model['min']==model['max']%}
+      {%set price_range = "${:,.2f}".format(model['min'])%}
+      {%else%}
+      {%set price_range = "${:,.2f}".format(model['min'])+" to "+"${:,.2f}".format(model['max'])%}
+      {%endif%}
+      <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+        <div class="card d-flex h-100">
+          <a href="{{url_for('store.detail', model = model['model'])}}">
+            <img src="{{model['img']}}" class="card-img-top border border-white" alt="{{model['model']}}">
+          </a>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title">{{model['model']}} {{model['name']}}</h6>
+            <a href="{{url_for('store.detail', model = model['model'])}}" class="btn btn-secondary mt-auto" style="letter-spacing:0.05em">
+              {{price_range}}
+            </a>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 bg-light border">
+    <h1 class="row mt-2 justify-content-center">New Products</h1>
+    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2 my-3">
+      {%for model in new_products%}
+      {%if model['min']==model['max']%}
+      {%set price_range = "${:,.2f}".format(model['min'])%}
+      {%else%}
+      {%set price_range = "${:,.2f}".format(model['min'])+" to "+"${:,.2f}".format(model['max'])%}
+      {%endif%}
+      <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+        <div class="card d-flex h-100">
+          <a href="{{url_for('store.detail', model = model['model'])}}">
+            <img src="{{model['img']}}" class="card-img-top border border-white" alt="{{model['model']}}">
+          </a>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title">{{model['model']}} {{model['name']}}</h6>
+            <a href="{{url_for('store.detail', model = model['model'])}}" class="btn btn-secondary mt-auto" style="letter-spacing:0.05em">
+              {{price_range}}
+            </a>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+</div>
+
+
+
+
+{%endblock%}

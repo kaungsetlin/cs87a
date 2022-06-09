@@ -1,0 +1,19 @@
+<p>Dear {{fname}} {{lname}},</p>
+<p>Thank you for shopping with Sinphyudaw!</p>
+<h3>Order #{{order_id}}</h3>
+{%for item in order_items%}
+<p>
+  <!-- <img class="me-3" width="80" src="{{url_for('static', filename=item['img'], _external=True)}}" alt="{{item['sku']}}"> -->
+  &#8226; {{item['brand']}} {{item['model']}} {{item['sku']}} x{{item['qty']}} {{ "${:,.2f}".format(item['price'] * item['qty'])}}
+</p>
+{%endfor%}
+<br>
+Subtotal: {{"${:,.2f}".format(total_price)}}<br>
+Shipping: Free<br>
+{%set tax = total_price * 0.1%}
+Tax: {{"${:,.2f}".format(tax)}}<br>
+Total: {{"${:,.2f}".format(total_price + tax)}}<br><br>
+
+<p>Sincerely,</p>
+<p>Sinphyudaw</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>

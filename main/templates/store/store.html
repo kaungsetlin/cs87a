@@ -1,0 +1,38 @@
+{%extends 'base.html'%}
+{%block title%}Items{%endblock%}
+{%block content%}
+<div class="row mb-5 row-cols-lg-4 row-cols-sm-2">
+  {%for model in models%}
+  {%if model['min']==model['max']%}
+  {%set price_range = "${:,.2f}".format(model['min'])%}
+  {%else%}
+  {%set price_range = "${:,.2f}".format(model['min'])+" to "+"${:,.2f}".format(model['max'])%}
+  {%endif%}
+  <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+    <div class="card d-flex h-100">
+      <a href="{{url_for('store.detail', model = model['model'])}}">
+        <img src="{{model['img']}}" class="card-img-top border border-white" alt="{{model['model']}}">
+      </a>
+      <div class="card-body d-flex flex-column">
+        <h6 class="card-title">{{model['model']}} {{model['name']}}</h6>
+        <a href="{{url_for('store.detail', model = model['model'])}}" class="btn btn-secondary mt-auto" style="letter-spacing:0.05em">
+          {{price_range}}
+        </a>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+</div>
+<div class="row my-3 justify-content-start">
+  <div class="col-lg-3 col-sm-12 h6">
+    {%if page > 1%}
+    <a class="btn btn-outline-primary btn-sm mx-3" href="{{url_for('store.store', page = page - 1)}}">Previous</a>
+    {%endif%}
+    Page {{page}} of {{pages}}
+    {%if page < pages%}
+    <a class="btn btn-outline-primary btn-sm mx-3" href="{{url_for('store.store', page = page + 1)}}">Next</a>
+    {%endif%}
+  </div>
+</div>
+
+{%endblock%}

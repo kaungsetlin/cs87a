@@ -1,0 +1,63 @@
+{%extends 'base.html'%}
+{%block title%}Support{%endblock%}
+
+{%block content%}
+<div class="row">
+  <div class="col-12 my-3">
+    <div class="card h-100 bg-secondary text-white">
+      <div class="card-header">
+        <h3 class="text-center my-3">Help Me Choose</h3>
+        <p class="card-text p-2 text-center">
+          Unsure which product is right for you? <br>Answer a few questions about what you are looking for and we'll provide a short list of products that will best fit your needs.
+        </p>
+      </div>
+      <div class="card-footer text-center bg-light">
+        <a href="#" class="btn btn-outline-dark">Get Started</a>
+      </div>
+    </div>
+  </div>
+  <h3 class="text-center mt-3">Browse by Topic</h3>
+  <div class="col-lg-4 col-md-12 col-sm-12 my-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title text-center">Warranty</h5>
+        <p class="card-text p-2">All our products come with a limited warranty based on your product and region.</p>
+      </div>
+      <div class="card-footer text-center bg-light">
+        <a href="#" class="btn btn-secondary">See Warranty</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-12 col-sm-12 my-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title text-center">Repair & Replacement</h5>
+        <p class="card-text p-2">Our goal is to provide you with exceptional service for your products. Think your product needs service? Let us help</p>
+      </div>
+      <div class="card-footer text-center bg-light">
+        <a href="#" class="btn btn-secondary">Start My Service</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-12 col-sm-12 my-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title text-center">Product Returns</h5>
+        <p class="card-text p-2">Satisfaction is guaranteed on all out products. If you're not satisfied with your purchase for any reason, simply return it within the trial period for a full refund.</p>
+      </div>
+      <div class="card-footer text-center bg-light">
+        <a href="#" class="btn btn-secondary">Start A Return</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 my-3 bg-light">
+    <h3 class="text-center my-3">Find Your Product</h3>
+    <p class="text-center"><small>Search by product name, serial number or UPC</small></p>
+    <form class="d-flex mt-3 mb-5 w-50 mx-auto" action="{{url_for('store.search')}}" method="get">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+      <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </form>
+  </div>
+</div>
+
+{%endblock%}

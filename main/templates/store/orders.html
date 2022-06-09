@@ -1,0 +1,35 @@
+{%extends 'base.html'%}
+{%block header%}
+<h1>{%block title%}Orders{%endblock%}</h1>{%endblock%}
+{%block content%}
+<div class="row">
+  {%for k, v in orders.items()%}
+  {%if loop.index <= 1 %}
+  <div class="col-lg-8 col-md-8 col-sm-12">
+  {%else%}
+  <div class="col-lg-8 col-md-8 col-sm-12 mt-5">
+  {%endif%}
+    <div class="card">
+      <div class="card-body">
+        <span class="badge rounded-pill bg-success float-end">Delivered</span>
+        <h5 class="card-title">Order {{k['cust_po']}}</h5>
+        <p class="card-text"><small>Date {{k['order_start']}}</small></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        {%for order_item in v%}
+        <li class="list-group-item">
+          SKU {{order_item['alt_sku']}} x{{order_item['qty']}} {{"${:,.2f}".format(order_item['price'] * order_item['qty'])}}
+          <a class="btn btn-sm btn-secondary float-end" href="{{url_for('store.detail', model =  order_item['model'])}}">See Item</a>
+        </li>
+        {%endfor%}
+      </ul>
+      <div class="card-body">
+        <a href="#" class="btn btn-light btn-sm btn-outline-primary">Tracking</a>
+      </div>
+    </div>
+  </div>
+  {%else%}
+  You have no orders...
+  {%endfor%}
+</div>
+{%endblock%}

@@ -1,0 +1,139 @@
+{%extends 'base.html'%}
+{%block header%}
+<h1>{%block title%}Checkout{%endblock%}</h1>{%endblock%}
+{%block content%}
+<div class="row my-3">
+  <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">Review Items and Shipping</h5>
+        <p class="h6 lh-lg card-text">
+          {%if total_price is not none%}
+          Subtotal: {{"${:,.2f}".format(total_price)}}<br>
+          Shipping: Free<br>
+          {%set tax = total_price * 0.1%}
+          Tax: {{"${:,.2f}".format(tax)}}<br>
+          Total: {{"${:,.2f}".format(total_price + tax)}}<br>
+          {%else%}
+          <span class="badge bg-warning text-dark p-2">Your cart is empty</span><br>
+          {%endif%}
+        </p>
+      </div>
+      {%if checkout_items is not none%}
+      <ul class="list-group list-group-flush">
+        {%for checkout_item in checkout_items%}
+        {%set outer_loop = loop%}
+        {%for key,value in checkout_item.items()%}
+        <li class="list-group-item">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-lg-2 col-md-2">
+              {%if key['img'] is not none%}
+              <img class="me-3" width="80" src="{{url_for('static', filename=key['img'])}}" alt="{{key['alt_sku']}}">
+              {%else%}
+              <img class="me-3" width="80" src="https://picsum.photos/seed/{{outer_loop.index}}/200" alt="">
+              {%endif%}
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-12">
+              {{key['alt_sku']}} price: {{ "${:,.2f}".format(key['price']*value) }} qty:{{"{:,d}".format(value)}}
+            </div>
+          </div>
+         </li>
+        {%endfor%}
+        {%endfor%}
+      </ul>
+      {%endif%}
+      {%if total_price is not none and total_price > 0%}
+      <div class="card-body">
+        <a href="{{url_for('store.cart')}}" class="card-link btn btn-primary">Return to Cart</a>
+      </div>
+      {%else%}
+      <div class="card-body">
+        <a href="{{url_for('store.store')}}" class="card-link btn btn-primary">Return to Store</a>
+      </div>
+      {%endif%}
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-12 border rounded p-3">
+    <form method="post" action="{{url_for('store.payment')}}" class="row g-3">
+      <div class="col-md-6 col-sm-12">
+        <label for="fname" class="form-label">First Name</label>
+        <input type="text" class="form-control" value="{{g.user['ship_fname']}}" name="fname" required>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <label for="lname" class="form-label">Last Name</label>
+        <input type="text" class="form-control" value="{{g.user['ship_lname']}}" name="lname" required>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control text-truncate" name="email" value="{{g.user['username']}}" required>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <label for="phone" class="form-label">Phone</label>
+        <input type="tel" class="form-control" name="phone" value="{{g.user['phone']}}" required>
+      </div>
+      <div class="col-12">
+        <label for="address1" class="form-label">Address</label>
+        <input type="text" class="form-control" name="address1" placeholder="1234 Main St" value="{{g.user['address1']}}" required>
+      </div>
+      <div class="col-12">
+        <label for="address2" class="form-label">Address 2</label>
+        <input type="text" class="form-control" name="address2" value="{{g.user['address2']}}" placeholder="Apartment, studio, or floor">
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" name="city" value="{{g.user['city']}}" required>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <label for="state" class="form-label">State</label>
+        <select name="state" class="form-select" value="{{g.user['state']}}">
+          {%if g.user['state']%}
+          <option value="{{g.user['state']}}"selected>{{g.user['state']}}</option>
+          {%else%}
+          <option selected>Choose State...</option>
+          {%endif%}
+          <option value="CA">California</option>
+          <option value="TX">Texas</option>
+          <option value="FL">Florida</option>
+        </select>
+      </div>
+      <div class="col-md-2 col-sm-12">
+        <label for="postal_code" class="form-label">Zip</label>
+        <input type="text" class="form-control" name="postal_code" value="{{g.user['postal_code']}}">
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <label for="country" class="form-label">Country</label>
+        <input type="input" class="form-control " name="country" value="{{g.user['country'] or 'US'}}" required><br>
+      </div>
+      <fieldset class="col-md-6 col-sm-12 mb-3">
+        <legend class="col-form-label col-sm-2 pt-0">Payment</legend>
+        <div class="col-sm-10">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="term" value="Credit Card" checked>
+            <label class="form-check-label" for="term">
+              Credit Card
+            </label>
+          </div>
+          <div class="form-check disabled">
+            <input class="form-check-input" type="radio" name="term" value="Cryptocurrency" disabled>
+            <label class="form-check-label" for="term">
+              Cryptocurrency
+            </label>
+          </div>
+        </div>
+      </fieldset>
+      {%if total_price is not none and total_price > 0%}
+      <div class="col-md-12">
+        <!-- <input type="submit" name="action" class="btn btn-success" value="Confirm Payment" onclick="return confirm('Thank you for your purchase, an order confirmation will be sent to your email.')"> -->
+        <input type="submit" name="action" class="btn btn-success" value="Payment">
+      </div>
+      {%else%}
+      <div class="col-md-12">
+        <!-- <input type="submit" name="action" class="btn btn-success" value="Confirm Payment" onclick="return confirm('Thank you for your purchase, an order confirmation will be sent to your email.')"> -->
+        <a href="{{url_for('store.store')}}" class="btn btn-success">Back to Store</a>
+      </div>
+      {%endif%}
+
+  </div>
+</div>
+{%endblock%}

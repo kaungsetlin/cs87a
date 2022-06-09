@@ -1,0 +1,133 @@
+{%extends 'base.html'%}
+
+{%block title%}{{db_model['model']}} {{db_model['name']}}{%endblock%}
+
+{%block content%}
+<div class="row mb-5 justify-content-around">
+  <div class="col-lg-5 col-md-5 col-sm-12">
+    <div class="card">
+
+
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {%if get_images(url_for('static', filename=sku['img']))|length == 0%}
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="https://picsum.photos/720" alt="no_image">
+            </div>
+            {%else%}
+
+            {%for img in get_images(url_for('static', filename=sku['img']))%}
+            {%if loop.index == 1%}
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="{{img}}" alt="{{db_model['model']}}">
+            </div>
+            {%else%}
+            <div class="carousel-item">
+              <img class="d-block w-100" src="{{img}}" alt="{{db_model['model']}}">
+            </div>
+            {%endif%}
+            {%endfor%}
+          {%endif%}
+          <!--
+          <div class="carousel-item active">
+            {%if sku is none%}
+            <img class="d-block w-100" src="{{db_model['model_img']}}" alt="{{db_model['model']}}">
+            {%else%}
+            <img class="d-block w-100" src="{{url_for('static', filename=sku['img'])}}" alt="{{sku['alt_sku']}}">
+            {%endif%}
+          </div>
+        -->
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-12">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="h4 card-title">{{db_model['model']}} {{db_model['name']}}</div>
+        <p class="card-text lh-lg h6">
+          Brand: {{db_model['brand']}}<br>
+          Model: {{db_model['model']}}<br>
+          Category: {{db_model['category']}}<br>
+        </p>
+      </div>
+
+      <div class="card-body">
+        <form class="row" action="{{url_for('store.detail', model = db_model['model'])}}" method="post">
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <label for="color" class="mb-2">Color</label>
+            <select name="color" class="form-select form-select-sm" onchange="this.form.submit()">
+              {%for color in db_colors%}
+                {%if sku is not none and sku['attr1'] == color['color']%}
+                <option value="{{sku['attr1']}}" selected>{{sku['color']}}</option>
+                {%else%}
+                <option value="{{color['color']}}">{{color['name']}}</option>
+                {%endif%}
+              {%endfor%}
+            </select>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <label for="graphic" class="mb-2">Graphic</label>
+            <select name="graphic" class="form-select form-select-sm" onchange="this.form.submit()">
+              {%for graphic in db_graphics[sku['attr1']]%}
+                {%if sku is not none and sku['attr2'] == graphic['graphic']%}
+                <option value="{{sku['attr2']}}" selected>{{sku['graphic']}}</option>
+                {%else%}
+                <!-- {{graphic['img']}} -->
+                <option value="{{graphic['graphic']}}">{{graphic['name']}}</option>
+                {%endif%}
+              {%endfor%}
+            </select>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <label for="size" class="mb-2">Size </label>
+            <select name="size" class="form-select form-select-sm" onchange="this.form.submit()">
+              {%for size in db_sizes%}
+                {%if sku is not none and sku['attr3'] == size['size']%}
+                <option value="{{sku['attr3']}}" selected>{{sku['size']}}</option>
+                {%else%}
+                <option value="{{size['size']}}">{{size['name']}}</option>
+                {%endif%}
+              {%endfor%}
+            </select>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-5">
+            <label for="quantity" class="mb-2">Quantity</label>
+            <input class="form-control form-control-sm" type="number" name="quantity" min="1" value="1">
+          </div>
+
+          <div class="col-12">
+            <button id="cart" type="submit" name="action" class="btn btn-primary me-3" value="Add to Cart">
+              Add to Cart
+            </button>
+            <button type="submit" name="action" class="btn btn-success" value="Checkout">
+              Checkout
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+{%endblock%}

@@ -1,0 +1,80 @@
+{%extends 'base.html'%}
+{%block header%}
+<h1>{%block title%}Account{%endblock%}</h1>{%endblock%}
+<!-- read only -->
+{%block content%}
+<h3><a href="{{url_for('store.orders')}}">Your orders</a></h3>
+<h3>Your info</h3>
+<div class="row row-cols-1 row-cols-md-2 g-4 mb-3">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Contact info</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Email {{g.user['username']}}</li>
+        <li class="list-group-item">Phone {{g.user['phone']}}</li>
+      </ul>
+      <div class="card-body">
+       <a href="#" class="card-link">Edit Email</a>
+       <a href="#" class="card-link">Edit Phone</a>
+     </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Shipping Address</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+	{%if g.user['address1']|length == 0%}
+        <li class="list-group-item">No adddress saved.</li>
+	{%else%}
+        <li class="list-group-item">
+          {{g.user['ship_fname']}} {{g.user['ship_lname']}}<br>
+          {{g.user['address1']}}<br>
+          {%if g.user['address2']%}
+          {{g.user['address2']}}<br>
+          {%endif%}
+          {{g.user['city']}},
+          {{g.user['state']}},
+          {{g.user['postal_code']}},
+          {{g.user['country']}}
+        </li>
+	{%endif%}
+      </ul>
+      <div class="card-body">
+       <a href="#" class="card-link">Edit Shipping Address</a>
+     </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Payment info</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Credit Card [Bank account ending in 1101]</li>
+      </ul>
+      <div class="card-body">
+       <a href="#" class="card-link">Edit</a>
+       <a href="#" class="card-link">Delete</a>
+     </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Preferences</h5>
+        <p class="card-text">At Sinphyudaw, we value your privacy and will never share your information.</p>
+      </div>
+      <div class="card-body">
+       <a href="{{url_for('auth.change_password')}}" class="card-link">Change Password</a>
+       <a href="#" class="card-link">Close Account</a>
+     </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

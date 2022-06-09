@@ -1,0 +1,10 @@
+{%extends 'base.html'%}
+{%block header%}<h1>{%block title%}Confirm Your Account{%endblock%}</h1>{%endblock%}
+{%block content%}
+Hello, {{g.user['username']}}!<br>
+You have not confirmed your account yet.<br><br>
+Before you can access this site you need to confirm your account.<br>
+Check your inbox, you should have received an email with a confirmation link.<br>
+Need another confirmation email?<br>
+<a class="btn btn-primary" href="{{url_for('auth.resend_confirmation')}}">Click here</a>
+{%endblock%}

@@ -1,0 +1,15 @@
+{%extends 'base.html'%}
+{%block header%}<h1>{%block title%}Search Results{%endblock%}</h1>{%endblock%}
+
+{%block content%}
+{%for result in results%}
+{%if result['min']==result['max']%}
+{%set price_range = "${:,.2f}".format(result['min'])%}
+{%else%}
+{%set price_range = "${:,.2f}".format(result['min'])+" - "+"${:,.2f}".format(result['max'])%}
+{%endif%}
+{{loop.index}}. <a href="{{url_for('store.detail', model = result['model'])}}">{{result['model']}} {{result['name']}}</a> {{price_range}}<br><br>
+{%else%}
+Your search <i><b>{{query}}</b></i> did not match any of our products.
+{%endfor%}
+{%endblock%}

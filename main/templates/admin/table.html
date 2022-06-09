@@ -1,0 +1,41 @@
+{%extends 'base.html'%}
+{%block title%}{{table}}{%endblock%}
+{%block header%}
+<h1><a href="{{url_for('admin.admin')}}">{{table}}</a></h1>{%endblock%}
+{%block content%}
+<table class="table">
+  <thead class="table-light">
+    <tr>
+      <th scope="col">#</th>
+      <!-- fields -->
+      {%for field in fields%}
+      <th scope="col">{{field['name']}}</th>
+      {%else%}
+      Table has no fields
+      {%endfor%}
+    </tr>
+  </thead>
+
+  <tbody>
+    <!-- records -->
+    {%for record in records%}
+    <tr>
+      <th scope="row">{{loop.index}}</th>
+      {%for field in fields%}
+      {%if record[field['name']] is string%}
+      <td>{{record[field['name']]|truncate(40)}}</td>
+      {%else%}
+      <td>{{record[field['name']]}}</td>
+      {%endif%}
+      {%else%}
+      Unknown error.
+      {%endfor%}
+    </tr>
+    {%else%}
+    No records in table: {{table}}
+    {%endfor%}
+    <!-- end records -->
+  </tbody>
+
+</table>
+{%endblock%}

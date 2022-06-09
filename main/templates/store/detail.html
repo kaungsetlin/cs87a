@@ -1,0 +1,99 @@
+{%extends 'base.html'%}
+{%block content%}
+<h1>{{img}}</h1>
+<div class="row mb-5 justify-content-around row-cols-lg-2 row-cols-md-2 row-cols-sm-1">
+  <div class="col-lg-5 col-md-5 col-sm-12">
+    <div class="card">
+      {%if img is not none%}
+      <img class="card-img-top" src="{{url_for('static', filename=img)}}" alt="{{img}}">
+      {%elif item['img'] is not none%}
+      <img class="card-img-top" src="{{url_for('static', filename=item['img'])}}" alt="{{item['img']}}">
+      {%else%}
+      <img class="card-img-top" src="https://picsum.photos/seed/9/720" alt="#">
+      {%endif%}
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-md-5 col-sm-12">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="h4 card-title">{%block title%}{{item['model']}} {{item['name']}}{%endblock%}</div>
+        <p class="card-text lh-lg h6">
+          Brand: {{item['brand']}}<br>
+          Model: {{item['model']}} {{item['name']}}<br>
+          Category: {{item['category']}}<br>
+        </p>
+      </div>
+      <div class="card-body">
+        <form class="row" action="{{url_for('store.detail', model = item['model'])}}" method="post">
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <label for="attr1" class="mb-2">Attribute 1</label>
+            <select name="attr1" class="form-select form-select-sm" onchange="this.form.submit()">
+              {%for color in colors%}
+              {%if color_choice == color['attr1']%}
+              <option value="{{color['attr1']}}" selected>{{color['name']}}</option>
+              {%else%}
+              <option value="{{color['attr1']}}">{{color['name']}}</option>
+              {%endif%}
+              {%else%}
+              No attr1 found.
+              {%endfor%}
+            </select>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <label for="attr2" class="mb-2">Attribute 2</label>
+            <select name="attr2" class="form-select form-select-sm" onchange="this.form.submit()">
+              {%if graphics%}
+              {%for graphic in graphics%}
+              {%if graphic_choice == graphic['attr2']%}
+              <option value="{{graphic['attr2']}}" selected>{{graphic['name']}}</option>
+              {%else%}
+              <option value="{{graphic['attr2']}}">{{graphic['name']}}</option>
+              {%endif%}
+              {%endfor%}
+              {%else%}
+              <option value="null">Please choose a color first.</option>
+              {%endif%}
+            </select>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <label for="size" class="mb-2">Size </label>
+            <select name="size" class="form-select form-select-sm" onchange="this.form.submit()">
+              {%for size in sizes%}
+              {%if size_choice == size['attr3']%}
+              <option value="{{size['attr3']}}" selected>{{size['name']}}</option>
+              {%else%}
+              <option value="{{size['attr3']}}">{{size['name']}}</option>
+              {%endif%}
+              {%else%}
+              No attr3 found.
+              {%endfor%}
+            </select>
+          </div>
+          <!-- Price: ${{item['price']}}<br>
+      SKU: {{item['alt_sku']}}<br> -->
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-5">
+            <label for="quantity" class="mb-2">Quantity</label>
+            <input class="form-control form-control-sm" type="number" name="quantity" min="1" value="1">
+          </div>
+
+          <div class="row row-cols-lg-2 row-cols-md-2 row-cols-sm-1">
+            <div class="col-lg-5 col-md-5 col-sm-12 m-1">
+              <button id="cart" type="submit" name="action" class="btn btn-primary me-3" value="Add to Carts">
+                Add to Cart
+              </button>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 m-1">
+              <button type="submit" name="action" class="btn btn-success" value="Checkout">
+                Checkout
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

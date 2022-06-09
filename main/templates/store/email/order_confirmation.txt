@@ -1,0 +1,16 @@
+Dear {{fname}} {{lname}},
+Thank you for shopping with Sinphyudaw!
+Order #{{order_id}}
+{%for item in order_items%}
+- {{item['brand']}} {{item['model']}} {{item['sku']}} x{{item['qty']}} {{ "${:,.2f}".format(item['price'])}}
+{%endfor%}
+
+Subtotal: {{"${:,.2f}".format(total_price)}}
+Shipping: Free
+{%set tax = total_price * 0.1%}
+Tax: {{"${:,.2f}".format(tax)}}
+Total: {{"${:,.2f}".format(total_price + tax)}}
+
+Sincerely,
+Sinphyudaw
+Note: replies to this email address are not monitored.
